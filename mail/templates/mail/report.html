@@ -1,0 +1,51 @@
+{% extends 'mail/base.html '%}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+         <form action="/mail" method="post">
+             {% csrf_token %}
+             {{ form }}
+             <div class="form-check">
+                <input class="form-check-input" type="radio" name="choice" id="1" value="new" checked>
+                <label class="form-check-label" for="1">
+                Сначала новые |
+                </label>
+            </div>
+            <div class="form-check">
+                 <input class="form-check-input" type="radio" name="choice" id="2" value="old">
+                 <label class="form-check-label" for="2">
+                 Сначала старые |
+                 </label>
+            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="choice" id="3" value="subject">
+                    <label class="form-check-label" for="3">
+                    По темам
+                    </label>
+            </div>
+            <p><input type="submit" value="Выбрать" class="form-control btn btn-success"> <!--onclick="{% url 'mail' %}"--> </p>
+        </form>
+
+        {% for el in messages %}
+            <div class="alert alert-warning mt-2">
+                <h3>{{ el.subject }}</h3>
+                <b>{{ el.from_email }}</b>
+                <p>{{ el.message }}</p>
+                <a class=" alert-warning mt-2" href="edit/{{el.id}}">Изменить</a> | <a class=" alert-warning mt-2" href="delete/{{el.id}}">Удалить</a>
+            </div>
+        {% endfor %}
+
+    {% else %}
+       <div class="alert alert-secondary mt-2 ">
+        <b class="mt-2">There is no message!</b>
+        <a class="alert-secondary tar" href="{% url 'contact' %}">Отправить сообщение</a>
+    </div>
+
+
+    {% endif %}
+{% endblock %}
